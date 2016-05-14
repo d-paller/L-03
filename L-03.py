@@ -1,4 +1,6 @@
 import csv
+import datetime
+
 
 # -- Test methods ----------------------------------------------------
 
@@ -15,7 +17,7 @@ def print_file(record):
 # *test method*
 def print_name(record):
     for row in record:
-        print (row['name'])
+        print (row)
 # End print_name
 
 
@@ -28,22 +30,92 @@ def count_players(record):
 # end count_players
 
 
+# returns a dictionary with only names and birthdates
+# def make_date_dict(record):
+#     date_dict = {}
+#
+#     for row in record:
+#         date_dict[record] = [row]
+#
+#     return date_dict
+# end make_date_dict
+
+
 # returns the name of the youngest player
+# requires: there be no two players of the exact same age
+# TODO Finish
 def find_youngest_player(record):
 
-    youngest_player = 0
     youngest_player_name = ""
+    latest_time = datetime.date.today()
+    this_time = datetime.date(1900, 1, 1)
 
     for row in record:
-        bd = row['birthdate'].split('-', 1)  # gets the birth date
+        record_dob = record[row][2].split("-")
 
-        if(bd[0] > youngest_player):
-            youngest_player_name = row['name']
-            youngest_player = bd[0]
+        this_time = datetime.date(int(record_dob[0]), int(record_dob[1]), int(record_dob[2]))
+
+        if this_time > latest_time:
+            latest_time = this_time
+            youngest_player_name = row
 
     return youngest_player_name
 
 # end find_youngest_player
+
+
+# prints all the country names
+
+
+# end print_country_names
+
+
+# collects the countries count and compiles them into a dictionary
+def get_country_count(record):
+    countries = dict()
+
+    for row in record:
+
+        if record[row][1] in countries:
+            countries[record[row][1]] += 1
+
+        else:
+            countries[record[row][1]] = 1
+
+    return countries
+# end get_country_count
+
+
+# returns the name of the country with the most players
+def most_players(country_record):
+    highest = 0
+    country_name = ''
+
+    for row in country_record:
+
+        if highest < country_record[row]:
+            highest = country_record[row]
+            country_name = row
+            # print(highest)  # echo
+
+    return country_name
+# end most_players
+
+
+# returns the name of the country with the least players
+def least_players(country_record):
+    least = 1000
+    country_name = ''
+
+    for row in country_record:
+
+        if least > country_record[row]:
+            least = country_record[row]
+            country_name = row
+            # print(least)  # echo
+
+    return country_name
+# end least_players
 
 
 # returns a dictionary
@@ -52,11 +124,11 @@ def find_youngest_player(record):
 # 1 - country_id
 # 2 - birthdate
 def csv_to_dict(csv_file):
-    dict = {}
+    new_dict = {}
     for row in csv_file:
-        dict[row['name'].strip()] = [row['player_id'], row['country_id'], row['birthdate']]
+        new_dict[row['name'].strip()] = [row['player_id'], row['country_id'], row['birthdate']]
 
-    return dict
+    return new_dict
 
 # end csv_to_dict
 
@@ -67,12 +139,26 @@ def csv_to_dict(csv_file):
 with open('players.csv', 'r', newline="") as playersFile:
     players = csv.DictReader(playersFile, delimiter=',')
 
+# converts the dictReader to a dictionary
     players_dict = csv_to_dict(players)
 
-    print('There are ' + str(count_players(players_dict)) + ' players in the record.')
+# prints the number of players in the record
+    print('\nThere are ' + str(count_players(players_dict)) + ' players in the record. \n')
 
+    # print('The youngest player is ' + find_youngest_player(players_dict))
 
+    country_dict = get_country_count(players_dict)
 
+    print(most_players(country_dict) + ' has the most players. \n')
+
+    print(least_players(country_dict) + ' has the least players. \n')
+    # during testing, I found that there are multiple countries with only one player.  Output will not be consistent
+
+    # print country names
+    print('There are the following countries in the record:')
+    print('------------------------------------------------')
+    for row in country_dict:
+        print(row)
 
 
 
