@@ -43,20 +43,17 @@ def count_players(record):
 
 # returns the name of the youngest player
 # requires: there be no two players of the exact same age
-# TODO Finish
 def find_youngest_player(record):
 
     youngest_player_name = ""
-    latest_time = datetime.date.today()
-    this_time = datetime.date(1900, 1, 1)
+    max_date = datetime.date(1900, 1, 1)
 
     for row in record:
-        record_dob = record[row][2].split("-")
+        record_dob = record[row][2].split('-')
+        record_dob = datetime.date(int(record_dob[0]), int(record_dob[1]), int(record_dob[2]))
 
-        this_time = datetime.date(int(record_dob[0]), int(record_dob[1]), int(record_dob[2]))
-
-        if this_time > latest_time:
-            latest_time = this_time
+        if max_date < record_dob:
+            max_date = max(record_dob, max_date)
             youngest_player_name = row
 
     return youngest_player_name
@@ -64,10 +61,24 @@ def find_youngest_player(record):
 # end find_youngest_player
 
 
-# prints all the country names
+# returns the name of the oldest player
+# requires: there be no two players of the exact same age
+def find_oldest_player(record):
 
+    oldest_player_name = ""
+    min_date = datetime.date(2016, 1, 1)
 
-# end print_country_names
+    for row in record:
+        record_dob = record[row][2].split('-')
+        record_dob = datetime.date(int(record_dob[0]), int(record_dob[1]), int(record_dob[2]))
+
+        if min_date > record_dob:
+            min_date = min(record_dob, min_date)
+            oldest_player_name = row
+
+    return oldest_player_name
+
+# end find_oldest_player
 
 
 # collects the countries count and compiles them into a dictionary
@@ -145,8 +156,6 @@ with open('players.csv', 'r', newline="") as playersFile:
 # prints the number of players in the record
     print('\nThere are ' + str(count_players(players_dict)) + ' players in the record. \n')
 
-    # print('The youngest player is ' + find_youngest_player(players_dict))
-
     country_dict = get_country_count(players_dict)
 
     print(most_players(country_dict) + ' has the most players. \n')
@@ -159,6 +168,10 @@ with open('players.csv', 'r', newline="") as playersFile:
     print('------------------------------------------------')
     for row in country_dict:
         print(row)
+
+    print('The youngest player is ' + find_youngest_player(players_dict))
+
+    print('The oldest player is ' + find_oldest_player(players_dict))
 
 
 
