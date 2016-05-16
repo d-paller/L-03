@@ -1,44 +1,13 @@
 import csv
 import datetime
 
-
-# -- Test methods ----------------------------------------------------
-
-
-# prints file
-# *test method*
-def print_file(record):
-    for row in record:
-        print(row)
-# end print_file
-
-
-# Adds the players to the dictionary
-# *test method*
-def print_name(record):
-    for row in record:
-        print (row)
-# End print_name
-
-
-# -- Methods -------------------------------------------------------
+# -- Methods -----------------------------------------------------------------------------------------------------------
 
 
 # returns the number of players in the dictionary
 def count_players(record):
     return len(record)
 # end count_players
-
-
-# returns a dictionary with only names and birthdates
-# def make_date_dict(record):
-#     date_dict = {}
-#
-#     for row in record:
-#         date_dict[record] = [row]
-#
-#     return date_dict
-# end make_date_dict
 
 
 # returns the name of the youngest player
@@ -57,7 +26,6 @@ def find_youngest_player(record):
             youngest_player_name = row
 
     return youngest_player_name
-
 # end find_youngest_player
 
 
@@ -77,7 +45,6 @@ def find_oldest_player(record):
             oldest_player_name = row
 
     return oldest_player_name
-
 # end find_oldest_player
 
 
@@ -115,7 +82,7 @@ def most_players(country_record):
 
 # returns the name of the country with the least players
 def least_players(country_record):
-    least = 1000
+    least = 100000000
     country_name = ''
 
     for row in country_record:
@@ -140,11 +107,11 @@ def csv_to_dict(csv_file):
         new_dict[row['name'].strip()] = [row['player_id'], row['country_id'], row['birthdate']]
 
     return new_dict
-
 # end csv_to_dict
 
 
-# -------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+
 
 # opens the CSV file and puts it into reader
 with open('players.csv', 'r', newline="") as playersFile:
@@ -168,10 +135,11 @@ with open('players.csv', 'r', newline="") as playersFile:
     print('------------------------------------------------')
     for row in country_dict:
         print(row)
+    print('------------------------------------------------')
 
-    print('The youngest player is ' + find_youngest_player(players_dict))
+    print('\nThe youngest player is ' + find_youngest_player(players_dict))
 
-    print('The oldest player is ' + find_oldest_player(players_dict))
+    print('\nThe oldest player is ' + find_oldest_player(players_dict))
 
 
 
